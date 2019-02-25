@@ -5,7 +5,6 @@
 --      / \     /
 --     2   4   6
 --
-
 main = print (read_inorder(insertTree 6(insertTree 4(insertTree 2 (insertTree 7 (insertTree 3 (insertTree 5 EmptyTree)))))))
 data Tree a = EmptyTree | Node a (Tree a)(Tree a) deriving (Show, Read, Eq)
 
