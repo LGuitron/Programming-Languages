@@ -33,17 +33,17 @@ delete (Node y EmptyTree EmptyTree) del = if y == del then EmptyTree else (Node 
 delete (Node y left EmptyTree) del = if y == del then left else (Node y left EmptyTree)
 delete (Node y EmptyTree right) del = if y == del then right else (Node y EmptyTree right)
 delete (Node y left right) del
-    | y == del                                                                           = rebalance(Node mu left dmin)
-    | y > del && abs (balanceFactorChild dt right) < 2                                   = (Node y dt right)
-    | y < del && abs (balanceFactorChild left du) < 2                                    = (Node y left du)
-    | y > del && (balanceFactorChild (get_left_child right) (get_right_child right)) < 0 = balanceRR (Node y dt right) 
-    | y < del && (balanceFactorChild (get_left_child left) (get_right_child left)) > 0   = balanceLL (Node y left du)
-    | y > del                                                                            = balanceRL (Node y dt right)
-    | y < del                                                                            = balanceLR (Node y left du)
-        where dmin = delete right mu
-              dt   = delete left del
-              du   = delete right del
-              mu = head(read_inorder(right))
+    | y == del                                                                           = rebalance(Node mright left dmin)
+    | y > del && abs (balanceFactorChild dleft right) < 2                                = (Node y dleft right)
+    | y < del && abs (balanceFactorChild left dright) < 2                                = (Node y left dright)
+    | y > del && (balanceFactorChild (get_left_child right) (get_right_child right)) < 0 = balanceRR (Node y dleft right) 
+    | y < del && (balanceFactorChild (get_left_child left) (get_right_child left)) > 0   = balanceLL (Node y left dright)
+    | y > del                                                                            = balanceRL (Node y dleft right)
+    | y < del                                                                            = balanceLR (Node y left dright)
+        where dmin   = delete right mright
+              dleft  = delete left del
+              dright = delete right del
+              mright = head(read_inorder(right))
 
               
 --  Function for calculating depth for each tree
