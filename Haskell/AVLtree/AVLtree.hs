@@ -1,22 +1,20 @@
-main = print (insertTree (-15)(insertTree (-5)(insertTree (-10)(insertTree 25(insertTree 30(insertTree 0(insertTree 5(insertTree 10 (insertTree 15 (insertTree 20 EmptyTree))))))))))
+-- Inserting Test
+-- main = print (insertTree (-15)(insertTree (-5)(insertTree (-10)(insertTree 25(insertTree 30(insertTree 0(insertTree 5(insertTree 10 (insertTree 15 (insertTree 20 EmptyTree))))))))))
+
+-- Deleting Test
+main = print(delete (insertTree 8(insertTree 9(insertTree 10(insertTree 11 EmptyTree)))) 10)
 
 -- Binary tree structure also stures balancing factor b
 data Tree a = EmptyTree | Node a (Tree a)(Tree a) deriving (Show, Read, Eq)
 
-
+-- Insert operation for AVL tree
 insertTree x EmptyTree = Node x (EmptyTree)(EmptyTree)
 insertTree x (Node y left right)
            | x == y  = Node x left right 
            | x < y   = rebalance(Node y (insertTree x left) right) 
            | x > y   = rebalance(Node y left (insertTree x right)) 
 
-           
--- Calculate balance factor given left and right children
-balanceFactor EmptyTree             = 0
-balanceFactor (Node y left right)   = depth(right) - depth (left)
-
-
--- Balance tree after insertion
+-- Balance AVL Tree after insertion
 rebalance (Node y left right)
             
             | balanceFactor(Node y left right) == -2 && balanceFactor(left)  <=  0 = balanceLL(Node y left right)  
@@ -26,6 +24,38 @@ rebalance (Node y left right)
 
             -- Rebalancing not necessary
             | abs (balanceFactor(Node y left right)) < 2 = (Node y left right)  
+           
+           
+
+-- Delete operation for AVL tree
+delete EmptyTree del = EmptyTree
+delete (Node y EmptyTree EmptyTree) del = if y == del then EmptyTree else (Node y EmptyTree EmptyTree)
+delete (Node y left EmptyTree) del = if y == del then left else (Node y left EmptyTree)
+delete (Node y EmptyTree right) del = if y == del then right else (Node y EmptyTree right)
+delete (Node y left right) del
+    | y == del                                                                           = rebalance(Node mu left dmin)
+    | y > del && abs (balanceFactorChild dt right) < 2                                   = (Node y dt right)
+    | y < del && abs (balanceFactorChild left du) < 2                                    = (Node y left du)
+    | y > del && (balanceFactorChild (get_left_child right) (get_right_child right)) < 0 = balanceRR (Node y dt right) 
+    | y < del && (balanceFactorChild (get_left_child left) (get_right_child left)) > 0   = balanceLL (Node y left du)
+    | y > del                                                                            = balanceRL (Node y dt right)
+    | y < del                                                                            = balanceLR (Node y left du)
+        where dmin = delete right mu
+              dt   = delete left del
+              du   = delete right del
+              mu = head(read_inorder(right))
+
+              
+--  Function for calculating depth for each tree
+depth EmptyTree = 0
+depth (Node y left right) = (max (depth (left)) (depth (right))) + 1              
+
+-- Calculate balance factor given left and right children
+balanceFactor EmptyTree             = 0
+balanceFactor (Node y left right)   = depth(right) - depth (left)
+
+-- Calculate balance factor receiving two tree (left , right)
+balanceFactorChild left right = (depth left) - (depth right)
 
 -- Balance functions
 balanceLL (Node y (Node ly lleft lright) right) = (Node ly lleft (Node y lright right))
@@ -33,14 +63,10 @@ balanceLR (Node y (Node ly lleft (Node lry lrleft lrright)) right) = (Node lry (
 balanceRL (Node y left (Node ry (Node rly rlleft rlright) rright)) = (Node rly (Node y left rlleft) (Node ry rlright rright)) 
 balanceRR (Node y left (Node ry rleft rright)) = (Node ry (Node y left rleft) rright)
 
+-- Tree inorder printing
+read_inorder EmptyTree = []
+read_inorder (Node y left right) = read_inorder(left) ++ [y] ++ read_inorder(right)
 
-
---  Function for calculating depth for each tree
-depth EmptyTree = 0
-depth (Node y left right) = (max (depth (left)) (depth (right))) + 1
-
-                
--- Functions for getting left child, right child, value, and balancing factor of a given tree
+-- Get children of a given node
 get_left_child  (Node y left right ) = left
 get_right_child (Node y left right ) = right
-get_value (Node y left right )       = y
