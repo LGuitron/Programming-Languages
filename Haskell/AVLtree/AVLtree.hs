@@ -1,8 +1,8 @@
 -- Inserting Test
--- main = print (insertTree (-15)(insertTree (-5)(insertTree (-10)(insertTree 25(insertTree 30(insertTree 0(insertTree 5(insertTree 10 (insertTree 15 (insertTree 20 EmptyTree))))))))))
+main = print (insertTree (-15)(insertTree (-5)(insertTree (-10)(insertTree 25(insertTree 30(insertTree 0(insertTree 5(insertTree 10 (insertTree 15 (insertTree 20 EmptyTree))))))))))
 
 -- Deleting Test
-main = print(delete (insertTree 8(insertTree 9(insertTree 10(insertTree 11 EmptyTree)))) 10)
+-- main = print(delete (insertTree 8(insertTree 9(insertTree 10(insertTree 11 EmptyTree)))) 10)
 
 -- Binary tree structure also stures balancing factor b
 data Tree a = EmptyTree | Node a (Tree a)(Tree a) deriving (Show, Read, Eq)

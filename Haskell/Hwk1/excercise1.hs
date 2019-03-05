@@ -1,5 +1,5 @@
 -- main function receives value of n calculating lcm between numbers 1 - n
-main = print (least_multiple 20)
+main = print (least_multiple 4)
 
 
 -- function to calculate smallest number divisible by all numbers 1 - n
