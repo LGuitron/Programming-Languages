@@ -1,13 +1,7 @@
-main = print (least_multiple 10)
+main = print (head [x | x <- [1..1000000], func x 1 10 == True])
 
-
--- function to calculate lcm of numbers between 1 - n
-least_multiple 1 = 1
-least_multiple n = lcm n (least_multiple(n-1))
-
-
-
-
---least_multiple n = 
---                    take 5 [ lcm 5 (lcm(5-i) (5-i)) | i <- [1..4]]
---list_least_multiple n = [ lcm n (n-i) | i <- [1..n]]
+func y min max
+    | length list == max = True
+    | otherwise          = False
+    where
+        list = [x | x <- [min..max], mod y x ==0]
