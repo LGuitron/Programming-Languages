@@ -87,9 +87,19 @@ int main()
         std::cout<<binary_operation(functions[i], 2, 4)<<std::endl;
     }
     
+    
+    
     // LAMBDA EXPRESSIONS//
+    //double m = 3;
+    //double n = 4;
     std::cout<<"Lambda expression"<<std::endl;
     std::cout<<binary_operation([](double op1, double op2){ return pow(op1, op2); }, 2, 4)<<std::endl;
+    double n = 0;
+    double m = 0;
+    [&] (double op1, double op2) mutable { n = pow(op1, op2); }(2, 4);          // Capture by reference
+    [=] (double op1, double op2) mutable { m = pow(op1, op2); }(2, 4);          // Capture by value
+    std::cout <<  n << std::endl;
+    std::cout <<  m << std::endl;
     
     // FUNCTORS //
     std::cout<<"Functors"<<std::endl;
