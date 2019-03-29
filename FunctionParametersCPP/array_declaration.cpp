@@ -1,21 +1,25 @@
 #include <iostream>
 #include <cstdlib>
 
-template <class T>
-void reserve(T &pointer, int size)
+template <class T> // Pasar por referencia
+void reserve(T*&pointer, int size)
 {
-   pointer = (T) malloc(size*sizeof(T)); 
+   pointer = (T*) malloc(size*sizeof(T)); 
 }
-
+template<class T>  // pasar por dirección
+void reserveB(T** pointer, int size)
+{
+    *pointer = new T[size];
+}
 
 int main()
 {
     int p_sizes = 5;
     
-    
     // Int example
-    int *p1;
-    reserve(p1, p_sizes);
+    int *p1;    
+
+    reserveB(&p1, p_sizes);
     p1[2] = 1;
     for (int i = 0; i<p_sizes; i++)
     {
