@@ -2,7 +2,6 @@
 
 -export([start/0, write_pid/3]).
 
-% Do nothing when there are no more calls remaining
 write_pid(Wait_Time, Call_id, 0) ->
     done;
 
