@@ -65,7 +65,41 @@ minnums(Val1, Val2, Min) :-
 BUCKET SORT
 
 */
-bucketsort(List, Buckets, Result) :-
+
+
+/* Do bucket sort with given initial list*/ 
+
+bucketsortparent(List, Bucketsnum, Result) :-
+    length(List, X),
+    dividebuckets(List, Bucketsnum, Startbuckets),
+    [Head|Tail] = Startbuckets,
+    bucketsort(Head, Bucketsnum, Tail, [], Result).
+    
+bucketsort(List, Bucketsnum, Buckets ,Currentlist, Result) :-
+    length(List, X),
+    length(Buckets, Y),
+    Y > 0,
+    dividebuckets(List, Bucketsnum, Newlist),
+    [Head | Tail] = Newlist,
+    append(Tail, Buckets, Remainingbuckets),
+    bucketsort(Head, Bucketsnum, Remainingbuckets, Currentlist, Result).
+    
+
+/* Append List to final Result if it is a single value */
+bucketsort(List, Bucketsnum, Buckets, Currentlist, Result) :-
+    \+ (length(List, X)),
+    append(Currentlist, [List], Newlist),
+    [Head|Tail] = Buckets,
+    bucketsort(Head, Bucketsnum, Tail, Newlist, Result).
+
+    
+/* Return result when Buckets are empty */
+bucketsort(List, Bucketsnum,[], Currentlist, Result) :-
+    append(Currentlist, [List], Result).
+
+
+/* Divide a given list into its corresponding buckets */
+dividebuckets(List, Buckets, Result) :-
     maxlist(List, Maxval),
     minlist(List, Minval),
     Difference is Maxval - Minval,
@@ -88,11 +122,20 @@ cleanlist([], Currentlist, Result):-
 addsortedvalue([], List, Result):-
     append(List, [], Result).
 
+    
+/* List of size > 1 */
 addsortedvalue(Value, List, Result):-
     length(Value, X),
-    X > 0,
+    X > 1,
     append(List, [Value], Result).
 
+/* List of size 1 */
+addsortedvalue(Value, List, Result):-
+    length(Value, X),
+    X is 1,
+    append(List, Value, Result).
+
+    
 /* Get buckets as list of lists */
 getbuckets(List, Minval, Bucketsize, Bucketsremaining ,Currentbuckets, Result) :-
     Bucketsremaining > 0,
