@@ -70,13 +70,32 @@ bucketsort(List, Buckets, Result) :-
     minlist(List, Minval),
     Difference is Maxval - Minval,
     Bucketsize is floor(Difference / Buckets),
-    getbuckets(List, Minval, Bucketsize, Buckets, [] , Result).
+    getbuckets(List, Minval, Bucketsize, Buckets, [] , Newbuckets),
+    cleanlist(Newbuckets, [], Result).
+    
+/* Function for getting a new list to do bucketsort with */
+cleanlist(Bucketlists, Currentlist, Result):-
+    [Head|Tail] = Bucketlists,
+    addsortedvalue(Head, Currentlist, Newlist),
+    cleanlist(Tail,Newlist,Result).
+    
+/* All buckets have been checked */
+cleanlist([], Currentlist, Result):-
+    append(Currentlist, [], Result).
+    
+/* Function to append values to list (sorted) */
+/* Append already sorted numbers */
+addsortedvalue([], List, Result):-
+    append(List, [], Result).
 
+addsortedvalue(Value, List, Result):-
+    length(Value, X),
+    X > 0,
+    append(List, [Value], Result).
 
-/* Get buckets as list of lists*/
+/* Get buckets as list of lists */
 getbuckets(List, Minval, Bucketsize, Bucketsremaining ,Currentbuckets, Result) :-
     Bucketsremaining > 0,
-    
     createbucket(Minval, Minval + Bucketsize, List, Newbucket),
     append(Currentbuckets,[Newbucket], Newbucketlist),
     Newminval is Minval + Bucketsize + 1,
