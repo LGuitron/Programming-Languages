@@ -69,32 +69,32 @@ BUCKET SORT
 
 /* Do bucket sort with given initial list*/ 
 
-bucketsortparent(List, Bucketsnum, Result) :-
+bucketsort(List, Bucketsnum, Result) :-
     length(List, X),
     dividebuckets(List, Bucketsnum, Startbuckets),
     [Head|Tail] = Startbuckets,
-    bucketsort(Head, Bucketsnum, Tail, [], Result).
+    bucketsortrecursive(Head, Bucketsnum, Tail, [], Result).
     
-bucketsort(List, Bucketsnum, Buckets ,Currentlist, Result) :-
+bucketsortrecursive(List, Bucketsnum, Buckets ,Currentlist, Result) :-
     length(List, X),
     length(Buckets, Y),
     Y > 0,
     dividebuckets(List, Bucketsnum, Newlist),
     [Head | Tail] = Newlist,
     append(Tail, Buckets, Remainingbuckets),
-    bucketsort(Head, Bucketsnum, Remainingbuckets, Currentlist, Result).
+    bucketsortrecursive(Head, Bucketsnum, Remainingbuckets, Currentlist, Result).
     
 
 /* Append List to final Result if it is a single value */
-bucketsort(List, Bucketsnum, Buckets, Currentlist, Result) :-
+bucketsortrecursive(List, Bucketsnum, Buckets, Currentlist, Result) :-
     \+ (length(List, X)),
     append(Currentlist, [List], Newlist),
     [Head|Tail] = Buckets,
-    bucketsort(Head, Bucketsnum, Tail, Newlist, Result).
+    bucketsortrecursive(Head, Bucketsnum, Tail, Newlist, Result).
 
     
 /* Return result when Buckets are empty */
-bucketsort(List, Bucketsnum,[], Currentlist, Result) :-
+bucketsortrecursive(List, Bucketsnum,[], Currentlist, Result) :-
     append(Currentlist, [List], Result).
 
 
