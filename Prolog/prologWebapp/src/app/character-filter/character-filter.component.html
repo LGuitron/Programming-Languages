@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="text-center">The Simpsons Character Lookup</h2>
+    </div>
+  </div>
+  <br>
+  <hr>
+  <br>
+  <h5 class="text-center">Select character information from the following filters: </h5>
+
+  <!-- Filters -->
+  <form>
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Gender</label>
+      <select class="form-control" id="gender">
+        <option>any</option>
+        <option>male</option>
+        <option>female</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Age Group</label>
+      <select class="form-control" id="age">
+        <option>any</option>
+        <option>kid</option>
+        <option>adult</option>
+        <option>old</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Hair Color</label>
+      <select class="form-control" id="hair">
+        <option>any</option>
+        <option>black</option>
+        <option>yellow</option>
+        <option>blue</option>
+        <option>brown</option>
+        <option>gray</option>
+        <option>green</option>
+        <option>red</option>
+        <option>white</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-primary" (click)=searchCharacters()>Search</button>
+  </form>
+  <br>
+  <hr>
+  <br>
+  <!-- Search Results-->
+  <div class="row">
+      <div class="sugerencias col-sm-6 col-md-6 col-lg-3 mb-3" *ngFor="let character of characters; let i = index">
+          <div class="card">
+              <img [src]= character[1] alt="no disponible">
+              <p class="text-center">{{character[0]}}</p>
+          </div>
+      </div>
+    </div>
+</div>
+
+<div *ngIf=noResults>
+  <p class="text-center">No Characters Found</p>
+</div>

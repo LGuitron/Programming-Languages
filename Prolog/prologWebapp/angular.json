@@ -23,7 +23,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap/dist/js/bootstrap.js"
             ],
             "scripts": [],
             "es5BrowserSupport": true
@@ -58,7 +60,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "prologWebapp:build"
+            "browserTarget": "prologWebapp:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
