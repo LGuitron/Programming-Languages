@@ -8,6 +8,10 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 })
 export class CharacterFilterComponent implements OnInit {
 
+  genders : Array<any>;
+  ages : Array<any>;
+  hairs : Array<any>;
+
   characters : Array<any>;
   noResults : boolean;
 
@@ -16,6 +20,22 @@ export class CharacterFilterComponent implements OnInit {
   // Get all characters from DB
   ngOnInit() {
     this.noResults = false;
+
+    let request_body = {}
+    this.http.post("http://localhost:4200/api/genders", request_body).subscribe((response: any)=>{
+        this.genders = response;
+        this.genders.unshift("any");
+    });
+
+    this.http.post("http://localhost:4200/api/ages", request_body).subscribe((response: any)=>{
+        this.ages = response;
+        this.ages.unshift("any");
+    });
+
+    this.http.post("http://localhost:4200/api/hairs", request_body).subscribe((response: any)=>{
+        this.hairs = response;
+        this.hairs.unshift("any");
+    });
   }
 
   searchCharacters()
@@ -32,7 +52,7 @@ export class CharacterFilterComponent implements OnInit {
     request_body["age"] = age;
     request_body["hair"] = hair;
 
-    this.http.post("http://localhost:4200/api", request_body).subscribe((response: any)=>{
+    this.http.post("http://localhost:4200/api/characters", request_body).subscribe((response: any)=>{
         this.characters = response["answer"];
         this.noResults = this.characters.length == 0
     });

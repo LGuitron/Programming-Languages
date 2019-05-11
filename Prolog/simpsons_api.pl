@@ -27,34 +27,67 @@ character("Joe Quimby", "male", "adult","brown", "https://pbs.twimg.com/profile_
 character("Kent Brockman", "male", "old", "white", "https://pbs.twimg.com/profile_images/1054039722815905792/_EA35DdI_200x200.jpg").
 character("Reverendo Lovejoy", "male", "adult","brown", "http://www.quoteswarehouse.com/img/famous/reverend-lovejoy.jpg").
 
-% REST API
 
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
 
-% URL handlers.
-:- http_handler('/', handle_request, []).
+% ENDPOINTS
+:- http_handler('/characters', characters_request, []).
+:- http_handler('/genders', genders_request, []).
+:- http_handler('/ages', ages_request, []).
+:- http_handler('/hairs', hairs_request, []).
 
-solve(_{gender:Gender, age:Age, hair:Hair}, _{answer:Result}) :-
+%%%%%%%%%%%%%%%%%%%%
+% CHARACTER LOOKUP %
+%%%%%%%%%%%%%%%%%%%%
+solve_char(_{gender:Gender, age:Age, hair:Hair}, _{answer:Result}) :-
     checkvariable(Gender, Gendervar),
     checkvariable(Age, Agevar),
     checkvariable(Hair, Hairvar),
     findall([Name,URL], character(Name, Gendervar, Agevar , Hairvar,URL), Result).
     
-% ANY GENDER
+% ANY FILTER
 checkvariable(String, Variable) :-
     String == "any",
     Variable = _.
 
-% SPECIFIC GENDER
+% SPECIFIC FILTER VALUE
 checkvariable(String, Variable) :-
     \+ (String == "any"),
     Variable = String.
     
-handle_request(Request) :-
+characters_request(Request) :-
     http_read_json_dict(Request, Query),
-    solve(Query, Solution),
+    solve_char(Query, Solution),
+    reply_json_dict(Solution).
+
+
+%%%%%%%%%%%%%%%%%%
+% GENDERS LOOKUP %
+%%%%%%%%%%%%%%%%%%
+genders_request(Request) :-
+    http_read_json_dict(Request, _),
+    findall(Gender, character(_, Gender, _ , _,_), GenderList),
+    sort(GenderList, Solution),
+    reply_json_dict(Solution).
+    
+%%%%%%%%%%%%%%%
+% AGES LOOKUP %
+%%%%%%%%%%%%%%%
+ages_request(Request) :-
+    http_read_json_dict(Request, _),
+    findall(Age, character(_, _, Age , _,_), AgeList),
+    sort(AgeList, Solution),
+    reply_json_dict(Solution).
+    
+%%%%%%%%%%%%%%%%
+% HAIRS LOOKUP %
+%%%%%%%%%%%%%%%%
+hairs_request(Request) :-
+    http_read_json_dict(Request, _),
+    findall(Hair, character(_, _, _ , Hair,_), HairList),
+    sort(HairList, Solution),
     reply_json_dict(Solution).
 
 server(Port) :-

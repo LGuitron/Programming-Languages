@@ -14,34 +14,21 @@
     <div class="form-group">
       <label for="exampleFormControlSelect1">Gender</label>
       <select class="form-control" id="gender">
-        <option>any</option>
-        <option>male</option>
-        <option>female</option>
+        <option *ngFor="let gender of genders">{{gender}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="exampleFormControlSelect1">Age Group</label>
       <select class="form-control" id="age">
-        <option>any</option>
-        <option>kid</option>
-        <option>adult</option>
-        <option>old</option>
+          <option *ngFor="let age of ages">{{age}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="exampleFormControlSelect1">Hair Color</label>
       <select class="form-control" id="hair">
-        <option>any</option>
-        <option>black</option>
-        <option>yellow</option>
-        <option>blue</option>
-        <option>brown</option>
-        <option>gray</option>
-        <option>green</option>
-        <option>red</option>
-        <option>white</option>
+          <option *ngFor="let hair of hairs">{{hair}}</option>
       </select>
     </div>
     <button type="button" class="btn btn-primary" (click)=searchCharacters()>Search</button>
