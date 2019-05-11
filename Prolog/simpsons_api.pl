@@ -36,41 +36,21 @@ character("Reverendo Lovejoy", "male", "adult","brown", "http://www.quoteswareho
 % URL handlers.
 :- http_handler('/', handle_request, []).
 
-
-% NO FILTERS
-solve(_{}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, _, _ , _, URL), Result).
-
-% GENDER FILTER
-solve(_{gender:Gender}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, Gender, _ , _,URL), Result).
-
-% AGE FILTER
-solve(_{age:Age}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, _, Age , _,URL), Result).
-
-% HAIR FILTER
-solve(_{hair:Hair}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, _, _ , Hair,URL), Result).
-
-
-% GENDER & AGE FILTER
-solve(_{gender:Gender, age:Age}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, Gender, Age , _,URL), Result).
-
-
-% GENDER & HAIR FILTER
-solve(_{gender:Gender, hair:Hair}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, Gender,_ , Hair,URL), Result).
-
-
-% AGE & HAIR FILTER
-solve(_{age:Age, hair:Hair}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, _ , Age , Hair,URL), Result).
-
-% ALL FILTER
 solve(_{gender:Gender, age:Age, hair:Hair}, _{answer:Result}) :-
-    findall([Name,URL], character(Name, Gender, Age , Hair,URL), Result).
+    checkvariable(Gender, Gendervar),
+    checkvariable(Age, Agevar),
+    checkvariable(Hair, Hairvar),
+    findall([Name,URL], character(Name, Gendervar, Agevar , Hairvar,URL), Result).
+    
+% ANY GENDER
+checkvariable(String, Variable) :-
+    String == "any",
+    Variable = _.
+
+% SPECIFIC GENDER
+checkvariable(String, Variable) :-
+    \+ (String == "any"),
+    Variable = String.
     
 handle_request(Request) :-
     http_read_json_dict(Request, Query),
